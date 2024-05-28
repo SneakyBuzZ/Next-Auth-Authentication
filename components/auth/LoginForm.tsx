@@ -74,7 +74,7 @@ export const LoginForm = () => {
           <Button
             disabled={isPending}
             type="submit"
-            className="w-full bg-neutral-700"
+            className="w-full bg-neutral-700 translate-y-1"
           >
             {isPending ? (
               <span className="loading loading-spinner loading-sm"></span>

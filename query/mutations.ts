@@ -4,6 +4,9 @@ import { useMutation } from "@tanstack/react-query";
 
 import { loginAction, registerAction } from "@/actions";
 import { UserLogin, UserRegister } from "@/types";
+import { getUserByEmail, getUserById } from "@/data/user";
+
+// * ################ USER ######################
 
 export const useLoginQuery = () => {
   return useMutation({
@@ -14,5 +17,17 @@ export const useLoginQuery = () => {
 export const useRegisterQuery = () => {
   return useMutation({
     mutationFn: (user: UserRegister) => registerAction(user),
+  });
+};
+
+export const useGetUserByEmail = () => {
+  return useMutation({
+    mutationFn: (email: string) => getUserByEmail(email),
+  });
+};
+
+export const useGetUserById = () => {
+  return useMutation({
+    mutationFn: (id: string) => getUserById(id),
   });
 };
