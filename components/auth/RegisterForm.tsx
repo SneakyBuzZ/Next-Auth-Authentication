@@ -13,8 +13,8 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { registerSchema } from "@/schemas";
-import { useRegisterQuery } from "@/query/mutations";
+import { registerSchema } from "@/lib/schemas";
+import { useRegisterQuery } from "@/lib/query/mutations";
 import { useState } from "react";
 import { FormError } from "@/components/auth/FormError";
 import { FormSuccess } from "@/components/auth/FormSuccess";
@@ -22,6 +22,7 @@ import { FormSuccess } from "@/components/auth/FormSuccess";
 const RegisterForm = () => {
   const { mutateAsync: registerAction, isPending, error } = useRegisterQuery();
   const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -33,7 +34,11 @@ const RegisterForm = () => {
 
   async function onSubmit(values: z.infer<typeof registerSchema>) {
     const response = await registerAction(values);
-    setSuccessMessage(response.message);
+    if (response.status === 400) {
+      setErrorMessage(response.message);
+    } else if (response.status === 200) {
+      setSuccessMessage(response?.message);
+    }
   }
   return (
     <>
@@ -76,7 +81,7 @@ const RegisterForm = () => {
               </FormItem>
             )}
           />
-          <FormError label={error?.message} />
+          <FormError label={errorMessage} />
           <FormSuccess label={successMessage} />
           <Button
             disabled={isPending}

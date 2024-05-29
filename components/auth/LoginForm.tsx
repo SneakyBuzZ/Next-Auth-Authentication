@@ -15,15 +15,16 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { CardWrapper } from "@/components/auth/CardWrapper";
-import { loginSchema } from "@/schemas";
+import { loginSchema } from "@/lib/schemas";
 import { FormError } from "@/components/auth/FormError";
 import { FormSuccess } from "@/components/auth/FormSuccess";
-import { useLoginQuery } from "@/query/mutations";
+import { useLoginQuery } from "@/lib/query/mutations";
 import { useState } from "react";
 
 export const LoginForm = () => {
-  const { mutateAsync: loginAction, isPending, error } = useLoginQuery();
+  const { mutateAsync: loginAction, isPending } = useLoginQuery();
   const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -34,7 +35,13 @@ export const LoginForm = () => {
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     const response = await loginAction(values);
-    setSuccessMessage(response.message);
+    if (response) {
+      if (response?.status === 400) {
+        setErrorMessage(response.message);
+      } else if (response.status === 200) {
+        setSuccessMessage(response?.message);
+      }
+    }
   }
   return (
     <CardWrapper
@@ -69,7 +76,7 @@ export const LoginForm = () => {
               </FormItem>
             )}
           />
-          <FormError label={error ? "Failed to register" : ""} />
+          <FormError label={errorMessage} />
           <FormSuccess label={successMessage} />
           <Button
             disabled={isPending}
