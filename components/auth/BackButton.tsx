@@ -15,11 +15,14 @@ export const BackButton = ({ label, href }: BackButtonProps) => {
   };
   return (
     <>
-      <div className="w-full flex items-center justify-center text-md">
-        <Button onClick={handleClick} variant="link">
+      <form
+        action={handleClick}
+        className="w-full flex items-center justify-center text-md"
+      >
+        <Button type="submit" variant="link">
           {label}
         </Button>
-      </div>
+      </form>
     </>
   );
 };

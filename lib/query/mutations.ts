@@ -3,7 +3,7 @@
 import { useMutation } from "@tanstack/react-query";
 
 import { loginAction, registerAction } from "@/actions";
-import { UserLogin, UserRegister } from "@/lib/types";
+import { UserLogin, UserRegister } from "@/types";
 import { getUserByEmail, getUserById } from "@/actions/data/user";
 
 // * ################ USER ######################

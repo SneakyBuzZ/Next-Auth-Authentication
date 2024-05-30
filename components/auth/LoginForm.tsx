@@ -20,8 +20,15 @@ import { FormError } from "@/components/auth/FormError";
 import { FormSuccess } from "@/components/auth/FormSuccess";
 import { useLoginQuery } from "@/lib/query/mutations";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export const LoginForm = () => {
+  const params = useSearchParams();
+  const urlError =
+    params.get("error") === "OAuthAccountNotLinked"
+      ? "Email already in use with another provider"
+      : "";
+
   const { mutateAsync: loginAction, isPending } = useLoginQuery();
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -76,7 +83,7 @@ export const LoginForm = () => {
               </FormItem>
             )}
           />
-          <FormError label={errorMessage} />
+          <FormError label={errorMessage || urlError} />
           <FormSuccess label={successMessage} />
           <Button
             disabled={isPending}
