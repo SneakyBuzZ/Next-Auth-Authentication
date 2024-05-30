@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { CardWrapper } from "@/components/auth/CardWrapper";
 import { useCallback, useEffect, useState } from "react";
-import { verifyNewToken } from "@/actions";
+import { verifyNewTokenAction } from "@/actions";
 import { FormError } from "@/components/auth/FormError";
 import { FormSuccess } from "./FormSuccess";
 
@@ -19,7 +19,7 @@ const NewVerificationForm = () => {
       return;
     }
 
-    verifyNewToken(token).then((response) => {
+    verifyNewTokenAction(token).then((response) => {
       if (response.status === 400) {
         setErrorMessage(response.message);
       } else {
@@ -44,7 +44,8 @@ const NewVerificationForm = () => {
             (!errorMessage && (
               <span className="loading loading-dots loading-md"></span>
             ))}
-          <FormError label={errorMessage} />
+
+          {!successMessage && <FormError label={errorMessage} />}
           <FormSuccess label={successMessage} />
         </div>
       </CardWrapper>

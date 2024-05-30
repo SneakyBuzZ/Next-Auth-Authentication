@@ -7,10 +7,11 @@ import bcryptjs from "bcryptjs";
 import { signIn } from "@/auth";
 import { defaultLoginRedirect } from "@/route";
 import { AuthError } from "next-auth";
-import { loginSchema, registerSchema } from "@/lib/schemas";
+import { loginSchema, registerSchema, resetSchema } from "@/lib/schemas";
 import { generateVerificationToken } from "@/lib/verification";
 import { getUserByEmail } from "./data/user";
-import { sendVerificationEmail } from "@/lib/mail";
+import { sendResetPasswordEmail, sendVerificationEmail } from "@/lib/mail";
+import { generateResetPasswordToken } from "@/lib/resetPassword";
 
 export const loginAction = async (user: z.infer<typeof loginSchema>) => {
   const validatedFields = loginSchema.safeParse(user);
@@ -26,7 +27,7 @@ export const loginAction = async (user: z.infer<typeof loginSchema>) => {
 
   const existingUser = await getUserByEmail(email);
 
-  if (!existingUser || !existingUser.email || !existingUser.password) {
+  if (!existingUser || !existingUser?.email || !existingUser.password) {
     return {
       status: 400,
       message: "Email does not exist",
@@ -130,7 +131,7 @@ export const registerAction = async (user: z.infer<typeof registerSchema>) => {
   };
 };
 
-export const verifyNewToken = async (token: string) => {
+export const verifyNewTokenAction = async (token: string) => {
   const existingToken = await db.verificationToken.findUnique({
     where: {
       token,
@@ -163,7 +164,7 @@ export const verifyNewToken = async (token: string) => {
 
   await db.user.update({
     where: {
-      id: existingUser.id,
+      id: existingUser?.id,
     },
     data: {
       emailVerified: new Date(),
@@ -180,5 +181,105 @@ export const verifyNewToken = async (token: string) => {
   return {
     status: 200,
     message: "Email verified",
+  };
+};
+
+export const sendResetPasswordMail = async (
+  user: z.infer<typeof resetSchema>
+) => {
+  const validatedFields = resetSchema.safeParse(user);
+
+  if (!validatedFields.success) {
+    return {
+      status: 400,
+      message: "Validation failed",
+    };
+  }
+
+  const { email } = validatedFields.data;
+
+  const existingUser = await getUserByEmail(email);
+
+  if (!existingUser) {
+    return {
+      status: 400,
+      message: "User does not exist",
+    };
+  }
+
+  const resetPasswordToken = await generateResetPasswordToken(email);
+
+  await sendResetPasswordEmail(
+    resetPasswordToken.data.email,
+    resetPasswordToken.data.token
+  );
+
+  return {
+    status: 200,
+    message: "Password reset email sent",
+  };
+};
+
+export const resetPasswordAction = async (
+  token: string,
+  confirmedPassword: string
+) => {
+  const existingToken = await db.resetPasswordToken.findUnique({
+    where: {
+      token,
+    },
+  });
+
+  if (!existingToken) {
+    return {
+      status: 400,
+      message: "Invalid token",
+    };
+  }
+
+  const hasExpired = new Date(existingToken.expires) < new Date();
+  if (hasExpired) {
+    return {
+      status: 400,
+      message: "Token has expired",
+    };
+  }
+
+  const existingUser = await getUserByEmail(existingToken.email);
+
+  if (!existingToken) {
+    return {
+      status: 400,
+      message: "User does not exist",
+    };
+  }
+
+  if (existingUser?.password === confirmedPassword) {
+    return {
+      status: 400,
+      message: "Same password cannot be reset",
+    };
+  }
+
+  const hashedPassword = await bcryptjs.hash(confirmedPassword, 10);
+
+  await db.user.update({
+    where: {
+      id: existingUser?.id,
+    },
+    data: {
+      password: hashedPassword,
+    },
+  });
+
+  await db.resetPasswordToken.delete({
+    where: {
+      id: existingToken.id,
+    },
+  });
+
+  return {
+    status: 200,
+    message: "Password reset successfully",
   };
 };

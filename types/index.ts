@@ -8,3 +8,7 @@ export interface UserRegister {
   password: string;
   name: string;
 }
+
+export interface UserResetPassword {
+  email: string;
+}

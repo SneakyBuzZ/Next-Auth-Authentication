@@ -16,3 +16,14 @@ export const registerSchema = z.object({
     message: "Name is required",
   }),
 });
+
+export const resetSchema = z.object({
+  email: z.string().email(),
+});
+
+export const resetPasswordSchema = z.object({
+  password: z.string().min(6, {
+    message: "Password must contain at least 6 character",
+  }),
+  confirmedPassword: z.string(),
+});

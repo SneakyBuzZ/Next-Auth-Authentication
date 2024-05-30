@@ -2,8 +2,8 @@
 
 import { useMutation } from "@tanstack/react-query";
 
-import { loginAction, registerAction } from "@/actions";
-import { UserLogin, UserRegister } from "@/types";
+import { loginAction, registerAction, sendResetPasswordMail } from "@/actions";
+import { UserLogin, UserRegister, UserResetPassword } from "@/types";
 import { getUserByEmail, getUserById } from "@/actions/data/user";
 
 // * ################ USER ######################
@@ -29,5 +29,11 @@ export const useGetUserByEmail = () => {
 export const useGetUserById = () => {
   return useMutation({
     mutationFn: (id: string) => getUserById(id),
+  });
+};
+
+export const useSendResetPasswordMail = () => {
+  return useMutation({
+    mutationFn: (user: UserResetPassword) => sendResetPasswordMail(user),
   });
 };
