@@ -1,27 +1,32 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import Provider from "@/components/shared/Provider";
 import "@/styles/globals.css";
-import Provider from "@/lib/query/Provider";
+import { Inter } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+});
 
-export const metadata: Metadata = {
-  title: "Auth Js",
-  description: "Authentication system",
+export const metadata = {
+  title: "Spark",
+  description: "Discover and share your prompts",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+interface AppLayoutType {
   children: React.ReactNode;
-}>) {
+}
+
+const AppLayout = ({ children }: AppLayoutType) => {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <main className="flex flex-col items-center justify-center h-full">
-          <Provider>{children}</Provider>
-        </main>
+      <body>
+        <Provider>
+          <div className={`${inter.className} main bg-white`}>
+            <main className="spark-app w-full">{children}</main>
+          </div>
+        </Provider>
       </body>
     </html>
   );
-}
+};
+
+export default AppLayout;

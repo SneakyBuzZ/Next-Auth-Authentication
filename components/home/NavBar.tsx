@@ -1,17 +1,11 @@
 "use client";
 
-import { Button } from "@components/ui/button";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { MuseoModerno } from "next/font/google";
 import Link from "next/link";
 import { Menu } from "lucide-react";
-import {
-  signIn,
-  signOut,
-  getProviders,
-  LiteralUnion,
-  ClientSafeProvider,
-} from "next-auth/react";
+import { signIn, signOut, getProviders, LiteralUnion } from "next-auth/react";
 
 import {
   DropdownMenu,
@@ -24,7 +18,15 @@ import {
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
-import { BuiltInProviderType } from "next-auth/providers/index";
+import { BuiltInProviderType, ProviderType } from "next-auth/providers/index";
+
+export interface ClientSafeProvider {
+  id: LiteralUnion<BuiltInProviderType>;
+  name: string;
+  type: ProviderType;
+  signinUrl: string;
+  callbackUrl: string;
+}
 
 const museoModerno = MuseoModerno({
   subsets: ["latin"],
@@ -60,7 +62,7 @@ const NavBar = () => {
           />
 
           <span
-            className={`${museoModerno.className} font-semibold text-2xl sm:text-3xl -mx-2 drop-shadow-lg`}
+            className={`${museoModerno.className} text-neutral-700 font-semibold text-2xl sm:text-3xl -mx-2 drop-shadow-lg`}
           >
             Spark
           </span>

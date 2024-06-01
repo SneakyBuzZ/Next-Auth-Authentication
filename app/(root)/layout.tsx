@@ -17,7 +17,7 @@ interface RootLayoutType {
 const RootLayout = ({ children }: RootLayoutType) => {
   return (
     <div className={`${inter.className} flex flex-col items-center z-10`}>
-      <div className="gradient" />
+      <div className="gradient " />
       <NavBar />
       {children}
     </div>

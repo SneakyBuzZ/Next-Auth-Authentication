@@ -88,7 +88,7 @@
 }
 
 .main:before {
-  background: radial-gradient(circle, rgba(2, 0, 36, 0) 0, #e7e7e7 100%);
+  background: radial-gradient(circle, rgba(2, 0, 36, 0) 0, #f4f4f4 100%);
   position: absolute;
   content: "";
   z-index: 1;
