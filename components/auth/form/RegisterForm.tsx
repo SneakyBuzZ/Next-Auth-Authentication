@@ -16,8 +16,8 @@ import { Input } from "@/components/ui/input";
 import { registerSchema } from "@/lib/schemas";
 import { useRegisterQuery } from "@/lib/query/mutations";
 import { useState } from "react";
-import { FormError } from "@/components/auth/FormError";
-import { FormSuccess } from "@/components/auth/FormSuccess";
+import { FormError } from "@/components/auth/form/FormError";
+import { FormSuccess } from "@/components/auth/form/FormSuccess";
 
 const RegisterForm = () => {
   const { mutateAsync: registerAction, isPending, error } = useRegisterQuery();

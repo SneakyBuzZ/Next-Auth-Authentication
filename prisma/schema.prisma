@@ -1,12 +1,13 @@
 datasource db {
-  provider  = "postgresql"
-  url  	    = env("DATABASE_URL")
-  directUrl = env("DATABASE_URL_UNPOOLED")
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
+
 
 generator client {
   provider = "prisma-client-js"
 }
+
 
 enum UserRole{
   USER
@@ -14,51 +15,49 @@ enum UserRole{
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
   email         String?   @unique
   emailVerified DateTime? @map("email_verified")
   password      String?
-  role          UserRole  @default(USER)
-  image         String?
+  avatar        String?
   accounts      Account[]
  
   @@map("users")
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String  @map("user_id")
+  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String  @db.ObjectId
   type               String
   provider           String
   providerAccountId  String  @map("provider_account_id")
-  refresh_token      String? @db.Text
-  access_token       String? @db.Text
+  refresh_token      String? 
+  access_token       String? 
   expires_at         Int?
   token_type         String?
   scope              String?
-  id_token           String? @db.Text
+  id_token           String?
   session_state      String?
- 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user               User    @relation(fields: [userId] , references: [id])
  
   @@unique([provider, providerAccountId])
   @@map("accounts")
 }
 
 model VerificationToken {
-  id String @id @default(cuid())
-  email String
-  token String @unique
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  email   String
+  token   String  @unique
   expires DateTime
 
   @@unique([email , token])
 }
 
 model ResetPasswordToken {
-  id String @id @default(cuid())
-  email String
-  token String @unique
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  email   String
+  token   String  @unique
   expires DateTime
 
   @@unique([email , token])

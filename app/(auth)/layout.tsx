@@ -1,13 +1,16 @@
-import "@/styles/globals.css";
+import "@styles/globals.css";
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+export const metadata = {
+  title: "Spark",
+  description: "Discover and share your prompts",
+};
+
+interface AuthLayoutType {
   children: React.ReactNode;
-}>) {
-  return (
-    <div className="flex flex-col items-center justify-center h-full">
-      {children}
-    </div>
-  );
 }
+
+const AuthLayout = ({ children }: AuthLayoutType) => {
+  return <div className={` z-10`}>{children}</div>;
+};
+
+export default AuthLayout;

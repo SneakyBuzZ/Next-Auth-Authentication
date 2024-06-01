@@ -1,10 +1,10 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { CardWrapper } from "@/components/auth/CardWrapper";
+import { CardWrapper } from "@/components/auth/card/CardWrapper";
 import { useCallback, useEffect, useState } from "react";
 import { verifyNewTokenAction } from "@/actions";
-import { FormError } from "@/components/auth/FormError";
+import { FormError } from "@/components/auth/form/FormError";
 import { FormSuccess } from "./FormSuccess";
 
 const NewVerificationForm = () => {

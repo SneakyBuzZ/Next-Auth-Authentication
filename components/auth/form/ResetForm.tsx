@@ -14,10 +14,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { CardWrapper } from "@/components/auth/CardWrapper";
+import { CardWrapper } from "@/components/auth/card/CardWrapper";
 import { resetSchema } from "@/lib/schemas";
-import { FormError } from "@/components/auth/FormError";
-import { FormSuccess } from "@/components/auth/FormSuccess";
+import { FormError } from "@/components/auth/form/FormError";
+import { FormSuccess } from "@/components/auth/form/FormSuccess";
 import { useSendResetPasswordMail } from "@/lib/query/mutations";
 import { useState } from "react";
 

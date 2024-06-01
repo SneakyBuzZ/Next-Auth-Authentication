@@ -5,9 +5,9 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 
-import { Header } from "@/components/auth/Header";
-import { Social } from "@/components/auth/Social";
-import { BackButton } from "@/components/auth/BackButton";
+import { Header } from "@/components/auth/card/Header";
+import { Social } from "@/components/auth/card/Social";
+import { BackButton } from "@/components/auth/card/BackButton";
 
 interface CardWrapperProps {
   children: React.ReactNode;

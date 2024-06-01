@@ -14,4 +14,4 @@ export const authRoutes = [
 export const apiAuthPrefix = "/api/auth";
 
 //* User gets redirected to this default route
-export const defaultLoginRedirect = "/about";
+export const defaultLoginRedirect = "/home";

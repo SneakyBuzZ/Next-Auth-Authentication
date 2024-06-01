@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import authConfig from "@/auth.config";
+import authConfig from "@/authentication/auth.config";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "@/lib/db";
 import { getUserById } from "./actions/data/user";
@@ -37,7 +37,7 @@ export const {
       const existingUser = await getUserById(user.id);
 
       //* RESTRICTING NON VERIFIED USERS TO LOGIN
-      if (!existingUser) return false;
+      if (!existingUser.emailVerified) return false;
 
       //TODO ADD 2FA CHECK
 

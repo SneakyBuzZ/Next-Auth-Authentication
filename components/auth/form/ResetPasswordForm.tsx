@@ -18,12 +18,12 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { useSearchParams } from "next/navigation";
-import { CardWrapper } from "@/components/auth/CardWrapper";
+import { CardWrapper } from "@/components/auth/card/CardWrapper";
 import { resetPasswordSchema } from "@/lib/schemas";
 import { useState } from "react";
 import { resetPasswordAction } from "@/actions";
-import { FormSuccess } from "@/components/auth/FormSuccess";
-import { FormError } from "@/components/auth/FormError";
+import { FormSuccess } from "@/components/auth/form/FormSuccess";
+import { FormError } from "@/components/auth/form/FormError";
 import { useRouter } from "next/navigation";
 
 const ResetPasswordForm = () => {
